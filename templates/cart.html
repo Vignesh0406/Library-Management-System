@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart - Book Store{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div id='topmid' class="bg-secondary text-white p-2 mb-3 rounded">Shopping Cart</div>
+    
+    <div class="table-responsive">
+        <table class="table table-hover bg-white shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Price/Item</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if not cart_items %}
+                <tr>
+                    <th scope="row" colspan='5' class="text-center text-success py-4"> No Items In the Cart </th>
+                </tr>
+                {% else %}
+                    {% for item in cart_items %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.author }}</td>
+                        <td>&#8377; {{ item.price }}</td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <form method='post' action="{{ url_for('remove_from_cart') }}" class="m-0">
+                                    <input type='hidden' name='barcode' value='{{ item.barcode }}'/>
+                                    <button type='submit' class="btn btn-danger btn-sm"><i class="bi bi-dash"></i></button>
+                                </form>
+                                <span class="fw-bold">{{ item.qty }}</span>
+                                <form method='post' action="{{ url_for('add_to_cart') }}" class="m-0">
+                                    <input type='hidden' name='barcode' value='{{ item.barcode }}'/>
+                                    <button type='submit' class="btn btn-success btn-sm"><i class="bi bi-plus"></i></button>
+                                </form>
+                            </div>
+                        </td>
+                        <td>&#8377; {{ "%.2f"|format(item.total) }}</td>
+                    </tr>
+                    {% endfor %}
+                    
+                    <tr class="table-success">
+                        <th scope="row" colspan='4' class="text-center fw-bold"> Total Amount To Pay </th>
+                        <td colspan='1' class="fw-bold">&#8377; {{ "%.2f"|format(total_amount) }}</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if total_amount > 0 %}
+    <div class="text-end mt-4">
+        <form action="{{ url_for('checkout') }}" method="GET">
+            <button type="submit" class="btn btn-primary btn-lg">
+                Proceed to Pay &#8377; {{ "%.2f"|format(total_amount) }}
+            </button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

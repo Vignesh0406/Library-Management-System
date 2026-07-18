@@ -1,0 +1,15 @@
+version: 0.0
+os: windows
+files:
+  - source: \
+    destination: C:\onlinebookstore
+hooks:
+  ApplicationStop:
+    - location: scripts\stop_server.bat
+      timeout: 300
+  AfterInstall:
+    - location: scripts\install_dependencies.bat
+      timeout: 300
+  ApplicationStart:
+    - location: scripts\start_server.bat
+      timeout: 300

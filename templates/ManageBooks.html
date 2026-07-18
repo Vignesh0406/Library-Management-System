@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Books - Book Store{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Books Available In the Store</h2>
+        <a href="{{ url_for('add_book_page') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Add New Book
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">Book ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Author</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if not books %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4"> No Books Available in the store </td>
+                        </tr>
+                        {% else %}
+                            {% for book in books %}
+                            <tr>
+                                <td><span class="badge bg-light text-dark border border-secondary">{{ book.barcode[:8]|upper }}</span></td>
+                                <td>{{ book.name }}</td>
+                                <td>{{ book.author }}</td>
+                                <td>&#8377; {{ book.price }}</td>
+                                <td>
+                                    <span class="badge {% if book.quantity < 5 %}bg-danger{% else %}bg-success{% endif %}">
+                                        {{ book.quantity }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <form method="POST" action="{{ url_for('update_book') }}" class="m-0">
+                                            <input type="hidden" name="bookId" value="{{ book.barcode }}">
+                                            <button type="submit" class="btn btn-primary btn-sm">
+                                                <i class="bi bi-pencil-square"></i> Update
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="{{ url_for('remove_book') }}" class="m-0" onsubmit="return confirm('Are you sure you want to delete this book?');">
+                                            <input type="hidden" name="bookId" value="{{ book.barcode }}">
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="bi bi-trash"></i> Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

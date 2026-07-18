@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Update Book - Book Store{% endblock %}
+
+{% block content %}
+<div class="container my-5 d-flex justify-content-center">
+    <div class="card shadow-sm" style="max-width: 500px; width: 100%;">
+        <div class="card-header text-center pt-4 pb-2 border-0 bg-transparent">
+            <h3 class="fw-bold text-primary"><i class="bi bi-pencil-square"></i> Update Book</h3>
+            <p class="text-muted mb-0">Book ID: <span class="badge bg-secondary">{{ book.barcode[:8]|upper }}</span></p>
+        </div>
+        <div class="card-body p-4">
+            <form action="{{ url_for('update_book') }}" method="POST">
+                <input type="hidden" name="bookId" value="{{ book.barcode }}">
+                <div class="mb-3">
+                    <label for="bookName" class="form-label fw-semibold">Book Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-book"></i></span>
+                        <input type="text" class="form-control" name="name" id="bookName" value="{{ book.name }}" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="bookAuthor" class="form-label fw-semibold">Author</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" class="form-control" name="author" id="bookAuthor" value="{{ book.author }}" required>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="bookPrice" class="form-label fw-semibold">Price</label>
+                        <div class="input-group">
+                            <span class="input-group-text">&#8377;</span>
+                            <input type="number" step="0.01" class="form-control" name="price" id="bookPrice" value="{{ book.price }}" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="bookQuantity" class="form-label fw-semibold">Quantity</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-box-seam"></i></span>
+                            <input type="number" class="form-control" name="quantity" id="bookQuantity" value="{{ book.quantity }}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="bi bi-save"></i> Save Changes
+                    </button>
+                    <a href="{{ url_for('manage_books') }}" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Book Store{% endblock %}
+
+{% block styles %}
+<style>
+/* COMPACT CAPTCHA YELLOW */
+.capbox {
+	background: #f8f9fa;
+	border: 1px solid #ced4da;
+	border-left: 4px solid #0d6efd;
+	padding: 10px;
+	border-radius: 6px;
+    margin-bottom: 15px;
+}
+.capbox-inner {
+	display: flex;
+    align-items: center;
+    gap: 10px;
+}
+#CaptchaDiv {
+	font: normal 24px Impact, Charcoal, arial, sans-serif;
+	font-style: italic;
+	background-color: #e9ecef;
+	padding: 5px 15px;
+	border-radius: 4px;
+    letter-spacing: 2px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card glass-card p-4 mx-auto" style="max-width: 450px; width: 100%;">
+        <div class="card-body">
+            <h3 class="text-center fw-bold text-primary mb-4"><i class="bi bi-person-circle"></i> Customer Login</h3>
+            
+            <form action="{{ url_for('login') }}" method="post" onsubmit="return checkform()" id="theform">
+                <div class="mb-3">
+                    <label for="userEmail" class="form-label fw-semibold">Email Address</label>
+                    <input type="email" class="form-control" name="email" id="userEmail" placeholder="Enter your Email Address" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="Password" class="form-label fw-semibold">Password</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" name="password" id="Password" placeholder="Enter Password" required>
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword"><i class="bi bi-eye"></i></button>
+                    </div>
+                </div>
+
+                <div class="capbox">
+                    <label class="form-label fw-semibold">Security Check</label>
+                    <div class="capbox-inner">
+                        <div id="CaptchaDiv"></div>
+                        <input type="hidden" id="txtCaptcha">
+                        <input type="text" class="form-control" name="CaptchaInput" id="CaptchaInput" placeholder="Enter Captcha">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary w-100 mb-3" type="submit">Sign In</button>
+                
+                <div class="text-center">
+                    <p class="small text-muted mb-1">Don't have an account? <a href="{{ url_for('register_page') }}" class="text-decoration-none">Register here</a></p>
+                    <hr>
+                    <a href="{{ url_for('seller_login_page') }}" class="small text-decoration-none text-danger"><i class="bi bi-shield-lock"></i> Admin Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Password toggle
+    document.getElementById('togglePassword').addEventListener('click', function (e) {
+        const password = document.getElementById('Password');
+        const icon = this.querySelector('i');
+        if (password.type === 'password') {
+            password.type = 'text';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        } else {
+            password.type = 'password';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        }
+    });
+
+    function checkform() {
+        var theform = document.getElementById("theform");
+        var why = "";
+
+        if (theform.CaptchaInput.value == "") {
+            why += "Please Enter CAPTCHA Code.\n";
+        } else if (ValidCaptcha() == false) {
+            why += "The CAPTCHA Code Does Not Match.\n";
+        }
+        
+        if (why != "") {
+            alert(why);
+            return false;
+        }
+        return true;
+    }
+
+    var a = Math.ceil(Math.random() * 9) + '';
+    var b = Math.ceil(Math.random() * 9) + '';
+    var c = Math.ceil(Math.random() * 9) + '';
+    var d = Math.ceil(Math.random() * 9) + '';
+    var e = Math.ceil(Math.random() * 9) + '';
+
+    var code = a + b + c + d + e;
+    document.getElementById("txtCaptcha").value = code;
+    document.getElementById("CaptchaDiv").innerHTML = code;
+
+    function ValidCaptcha() {
+        var str1 = removeSpaces(document.getElementById('txtCaptcha').value);
+        var str2 = removeSpaces(document.getElementById('CaptchaInput').value);
+        if (str1 == str2) return true;
+        return false;
+    }
+    function removeSpaces(string) {
+        return string.split(' ').join('');
+    }
+</script>
+{% endblock %}

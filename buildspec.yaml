@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.x
+    commands:
+      - pip install -r requirements.txt
+  build:
+    commands:
+      - echo "Building Python Flask App..."
+artifacts:
+  files:
+    - '**/*'
+  exclude-paths:
+    - 'src/**/*'
+    - 'target/**/*'
+    - 'WebContent/**/*'
+    - '.settings/**/*'
+    - '.classpath'
+    - '.project'
+    - 'pom.xml'

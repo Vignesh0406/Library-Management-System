@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Book Store{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="page-header mb-4">
+        <h2>Admin Dashboard</h2>
+    </div>
+
+    <!-- Metrics Cards -->
+    <div class="row g-4 mb-5">
+        <!-- Total Orders -->
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <div class="card-body">
+                    <h5 class="text-muted">Total Orders</h5>
+                    <h2 class="fw-bold text-primary">{{ total_orders }}</h2>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Total Revenue -->
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <div class="card-body">
+                    <h5 class="text-muted">Total Revenue</h5>
+                    <h2 class="fw-bold text-success">&#8377; {{ "%.2f"|format(total_revenue) }}</h2>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pending Orders -->
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <div class="card-body">
+                    <h5 class="text-muted">Pending Orders</h5>
+                    <h2 class="fw-bold text-warning">{{ ordered_count }}</h2>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Low Stock -->
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <div class="card-body">
+                    <h5 class="text-muted">Low Stock Alerts</h5>
+                    <h2 class="fw-bold text-danger">{{ low_stock_books|length }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts & Tables Row -->
+    <div class="row g-4">
+        <!-- Chart Col -->
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Orders by Status</h5>
+                    <div style="position: relative; height:250px; width:100%;">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Low Stock Col -->
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-4 text-danger">
+                        <i class="bi bi-exclamation-triangle"></i> Low Stock Inventory
+                    </h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Book Name</th>
+                                    <th>Qty Left</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if not low_stock_books %}
+                                <tr>
+                                    <td colspan="2" class="text-center text-success">Inventory is healthy!</td>
+                                </tr>
+                                {% else %}
+                                    {% for book in low_stock_books %}
+                                    <tr>
+                                        <td>{{ book.name }}</td>
+                                        <td><span class="badge bg-danger">{{ book.quantity }}</span></td>
+                                    </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('statusChart');
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Ordered', 'Delivered', 'Cancelled'],
+                datasets: [{
+                    data: [{{ ordered_count }}, {{ delivered_count }}, {{ cancelled_count }}],
+                    backgroundColor: ['#ffc107', '#198754', '#dc3545'],
+                    borderWidth: 0
+                }]
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

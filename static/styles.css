@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #f6f8fd 0%, #f1f6f9 100%);
+    font-family: 'Inter', sans-serif;
+    color: #333;
+    min-height: 100vh;
+}
+
+/* Glassmorphism subtle card */
+.glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.1);
+}
+
+.glass-card .card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.glass-card img {
+    object-fit: contain;
+    max-height: 200px;
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background: #fff;
+    padding: 10px;
+}
+
+/* Navbar overrides */
+.navbar {
+    background: rgba(33, 37, 41, 0.95) !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover, .nav-item.active .nav-link, .nav-link.active {
+    color: #f39c12 !important;
+}
+
+/* Page Titles */
+.page-header {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    margin-top: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.page-header h2 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #2c3e50;
+}
+
+/* General Buttons */
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.holds-the-iframe {
+	background: url(loader.gif) center center no-repeat;
+}

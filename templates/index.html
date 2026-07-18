@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Book Store{% endblock %}
+
+{% block styles %}
+<style>
+    body {
+        background: linear-gradient(rgba(246, 248, 253, 0.2), rgba(241, 246, 249, 0.2)), url('{{ url_for('static', filename='Photo.jpg') }}') no-repeat center center fixed !important;
+        background-size: cover !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card glass-card text-center p-4 mx-auto" style="max-width: 480px;">
+        <div class="card-body">
+            <h1 class="display-6 fw-bold text-dark mb-4">Welcome to Online Book Store</h1>
+            <p class="lead text-muted mb-5">Happy Learning! Discover thousands of books and start reading today.</p>
+            <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                <a href="{{ url_for('customer_login_page') }}" class="btn btn-primary btn-lg px-4 gap-3">Sign In</a>
+                <a href="{{ url_for('register_page') }}" class="btn btn-outline-secondary btn-lg px-4">Create Account</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

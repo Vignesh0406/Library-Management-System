@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login - Book Store{% endblock %}
+
+{% block content %}
+<div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card glass-card p-4 mx-auto" style="max-width: 450px; width: 100%;">
+        <div class="card-body">
+            <h3 class="text-center fw-bold text-danger mb-4"><i class="bi bi-shield-lock"></i> Admin Login</h3>
+            
+            <form action="{{ url_for('login') }}" method="post" id="theform">
+                <div class="mb-3">
+                    <label for="userEmail" class="form-label fw-semibold">Email Address</label>
+                    <input type="email" class="form-control" name="email" id="userEmail" placeholder="Enter Email Address" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="Password" class="form-label fw-semibold">Password</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" name="password" id="Password" placeholder="Enter Password" required>
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword"><i class="bi bi-eye"></i></button>
+                    </div>
+                </div>
+
+                <button class="btn btn-danger w-100 mb-3" type="submit">Access Dashboard</button>
+                
+                <div class="text-center">
+                    <hr>
+                    <a href="{{ url_for('customer_login_page') }}" class="small text-decoration-none"><i class="bi bi-person-circle"></i> Customer Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Password toggle
+    document.getElementById('togglePassword').addEventListener('click', function (e) {
+        const password = document.getElementById('Password');
+        const icon = this.querySelector('i');
+        if (password.type === 'password') {
+            password.type = 'text';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        } else {
+            password.type = 'password';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        }
+    });
+</script>
+{% endblock %}

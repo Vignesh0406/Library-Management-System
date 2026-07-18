@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - Book Store{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="bg-secondary text-white p-2 mb-4 rounded">Cart Checkout</div>
+    
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <form action="{{ url_for('pay') }}" method="POST">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="mb-3">Billing Address</h4>
+                                <div class="mb-3">
+                                    <label for="fname" class="form-label"><i class="bi bi-person"></i> Full Name</label>
+                                    <input type="text" class="form-control" id="fname" name="firstname" placeholder="John M. Doe" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label"><i class="bi bi-envelope"></i> Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="john@example.com" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="adr" class="form-label"><i class="bi bi-house"></i> Address</label>
+                                    <input type="text" class="form-control" id="adr" name="address" placeholder="542 W. 15th Street" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="city" class="form-label">City</label>
+                                        <input type="text" class="form-control" id="city" name="city" placeholder="New York">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="zip" class="form-label">Zip</label>
+                                        <input type="text" class="form-control" id="zip" name="zip" placeholder="10001">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <h4 class="mb-3">Payment</h4>
+                                <label class="form-label">Accepted Cards</label>
+                                <div class="h3 mb-3 text-primary">
+                                    <i class="bi bi-credit-card-2-front"></i>
+                                    <i class="bi bi-credit-card"></i>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cname" class="form-label">Name on Card</label>
+                                    <input type="text" class="form-control" id="cname" name="cardname" placeholder="John More Doe" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="ccnum" class="form-label">Credit card number</label>
+                                    <input type="text" class="form-control" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="expmonth" class="form-label">Exp Month</label>
+                                        <input type="text" class="form-control" id="expmonth" name="expmonth" placeholder="September" required>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="expyear" class="form-label">Exp Year</label>
+                                        <input type="text" class="form-control" id="expyear" name="expyear" placeholder="2025" required>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="cvv" class="form-label">CVV</label>
+                                        <input type="text" class="form-control" id="cvv" name="cvv" placeholder="352" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-4">
+                        <div class="form-check mb-4">
+                            <input type="checkbox" class="form-check-input" id="sameadr" name="sameadr" checked>
+                            <label class="form-check-label" for="sameadr">Shipping address same as billing</label>
+                        </div>
+                        
+                        <div class="alert alert-info d-flex justify-content-between align-items-center">
+                            <span class="h4 m-0">Total Amount:</span>
+                            <span class="h4 m-0 fw-bold">&#8377; {{ "%.2f"|format(total_amount) }}</span>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success btn-lg w-100">Pay & Place Order</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Order Summary <span class="badge bg-primary rounded-pill">{{ cart_items|length }}</span></h4>
+                    <ul class="list-group list-group-flush mb-3">
+                        {% for item in cart_items %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <div>
+                                <h6 class="my-0">{{ item.name }}</h6>
+                                <small class="text-muted">Qty: {{ item.qty }}</small>
+                            </div>
+                            <span class="text-muted">&#8377; {{ "%.2f"|format(item.total) }}</span>
+                        </li>
+                        {% endfor %}
+                        <li class="list-group-item d-flex justify-content-between bg-light">
+                            <span class="fw-bold">Total (INR)</span>
+                            <strong class="text-success">&#8377; {{ "%.2f"|format(total_amount) }}</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

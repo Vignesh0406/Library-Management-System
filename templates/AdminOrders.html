@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Orders - Book Store{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="page-header mb-4">
+        <h2>Manage Orders</h2>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Order ID</th>
+                            <th>User</th>
+                            <th>Book</th>
+                            <th>Qty</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if not orders %}
+                        <tr>
+                            <td colspan="8" class="text-center py-4">No orders found.</td>
+                        </tr>
+                        {% else %}
+                            {% for order in orders %}
+                            <tr>
+                                <td><small class="text-muted text-nowrap">{{ order.order_id }}</small></td>
+                                <td>{{ order.username }}</td>
+                                <td>{{ order.book_name }}</td>
+                                <td>{{ order.qty }}</td>
+                                <td>&#8377; {{ "%.2f"|format(order.amount * order.qty) }}</td>
+                                <td>{{ order.ordered_date.strftime('%d %b %Y') }}</td>
+                                <td>
+                                    {% if order.status == 'CANCELLED' %}
+                                        <span class="badge bg-danger">Cancelled</span>
+                                    {% elif order.status == 'DELIVERED' %}
+                                        <span class="badge bg-success">Delivered</span>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if order.status == 'PENDING' %}
+                                    <form action="{{ url_for('update_order_status') }}" method="POST" class="m-0">
+                                        <input type="hidden" name="orderId" value="{{ order.id }}">
+                                        <input type="hidden" name="status" value="DELIVERED">
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            <i class="bi bi-check-circle"></i> Mark Delivered
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

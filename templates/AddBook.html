@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Add New Book - Book Store{% endblock %}
+
+{% block content %}
+<div class="container my-5 d-flex justify-content-center">
+    <div class="card shadow-sm" style="max-width: 500px; width: 100%;">
+        <div class="card-header text-center pt-4 pb-2 border-0 bg-transparent">
+            <h3 class="fw-bold text-primary"><i class="bi bi-journal-plus"></i> Add New Book</h3>
+            <p class="text-muted mb-0">Book ID: <span class="badge bg-secondary">{{ generated_id }}</span></p>
+        </div>
+        <div class="card-body p-4">
+            <form action="{{ url_for('add_book_page') }}" method="POST">
+                <input type="hidden" name="barcode" value="{{ generated_id }}">
+                <div class="mb-3">
+                    <label for="bookName" class="form-label fw-semibold">Book Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-book"></i></span>
+                        <input type="text" class="form-control" name="name" id="bookName" placeholder="Enter Book Title" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="bookAuthor" class="form-label fw-semibold">Author</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" class="form-control" name="author" id="bookAuthor" placeholder="Enter Author's Name" required>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="bookPrice" class="form-label fw-semibold">Price</label>
+                        <div class="input-group">
+                            <span class="input-group-text">&#8377;</span>
+                            <input type="number" step="0.01" class="form-control" name="price" id="bookPrice" placeholder="e.g. 299" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="bookQuantity" class="form-label fw-semibold">Quantity</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-box-seam"></i></span>
+                            <input type="number" class="form-control" name="quantity" id="bookQuantity" placeholder="e.g. 50" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="bi bi-plus-circle"></i> Add Book to Store
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
