@@ -319,7 +319,7 @@ def manage_books():
     return render_template('ManageBooks.html', books=books)
 
 @app.route('/addbook', methods=['GET', 'POST'])
-@app.route('/add_book_page', methods=['GET'])
+@app.route('/add_book_page', methods=['GET', 'POST'])
 def add_book_page():
     if 'user_email' not in session or session.get('user_type') != 1:
         return redirect(url_for('seller_login_page'))
