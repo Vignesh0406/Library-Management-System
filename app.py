@@ -142,6 +142,33 @@ def remove_from_cart():
         
     return redirect(request.referrer or url_for('home'))
 
+@app.route('/cart')
+def cart():
+    if 'user_email' not in session:
+        return redirect(url_for('customer_login_page'))
+
+    cart = session.get('cart', {})
+    cart_items = []
+    total_amount = 0
+
+    for barcode, qty in cart.items():
+        book = Book.query.get(barcode)
+        if book:
+            item_total = book.price * qty
+            total_amount += item_total
+            cart_items.append({
+                "book": book,
+                "qty": qty,
+                "total": item_total
+            })
+
+    return render_template(
+        "cart.html",
+        cart_items=cart_items,
+        total_amount=total_amount
+    )
+    
+
 @app.route('/checkout')
 def checkout():
     if 'user_email' not in session:
