@@ -7,7 +7,7 @@ import uuid
 app = Flask(__name__, static_folder='static', template_folder='templates')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///onlinebookstore.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'your_secret_key' # In a real app, use a secure random key
+app.secret_key = os.environ.get("SECRET_KEY","Vigneshwarnaik") # In a real app, use a secure random key
 
 db.init_app(app)
 
@@ -142,31 +142,6 @@ def remove_from_cart():
         
     return redirect(request.referrer or url_for('home'))
 
-@app.route('/cart')
-def cart():
-    if 'user_email' not in session:
-        return redirect(url_for('customer_login_page'))
-    
-    cart = session.get('cart', {})
-    cart_items = []
-    total_amount = 0
-    
-    for barcode, qty in cart.items():
-        book = Book.query.get(barcode)
-        if book:
-            item_total = book.price * qty
-            total_amount += item_total
-            cart_items.append({
-                'barcode': barcode,
-                'name': book.name,
-                'author': book.author,
-                'price': book.price,
-                'qty': qty,
-                'total': item_total
-            })
-            
-    return render_template('cart.html', cart_items=cart_items, total_amount=total_amount)
-
 @app.route('/checkout')
 def checkout():
     if 'user_email' not in session:
@@ -272,29 +247,13 @@ def cancel_order():
 
 @app.route('/admin')
 @app.route('/admin_dashboard')
+
+
 def admin_dashboard():
     if 'user_email' not in session or session.get('user_type') != 1:
         return redirect(url_for('seller_login_page'))
-    
-    books = Book.query.all()
-    orders = Order.query.all()
-    
-    total_orders = len(orders)
-    total_revenue = sum(o.amount * o.qty for o in orders if o.status != 'CANCELLED')
-    cancelled_count = sum(1 for o in orders if o.status == 'CANCELLED')
-    delivered_count = sum(1 for o in orders if o.status == 'DELIVERED')
-    ordered_count = total_orders - cancelled_count - delivered_count
-    
-    low_stock_books = [b for b in books if b.quantity < 5]
-    
-    return render_template('SellerHome.html', 
-                           books=books, 
-                           total_orders=total_orders,
-                           total_revenue=total_revenue,
-                           cancelled_count=cancelled_count,
-                           delivered_count=delivered_count,
-                           ordered_count=ordered_count,
-                           low_stock_books=low_stock_books)
+
+    return redirect(url_for('admin_orders'))
 
 @app.route('/adminorders')
 @app.route('/admin_orders')
@@ -333,7 +292,7 @@ def manage_books():
     return render_template('ManageBooks.html', books=books)
 
 @app.route('/addbook', methods=['GET', 'POST'])
-@app.route('/add_book_page', methods=['GET', 'POST'])
+@app.route('/add_book_page', methods=['GET'])
 def add_book_page():
     if 'user_email' not in session or session.get('user_type') != 1:
         return redirect(url_for('seller_login_page'))
